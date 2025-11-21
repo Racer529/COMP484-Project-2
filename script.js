@@ -13,13 +13,15 @@ $(function() {
 var pet_info = {
   name: "Ignikit",
   weight: 10,
-  happiness: 5
+  happiness: 5,
+  energy: 100
 };
 
 // Treat button behavior
 function clickedTreatButton() {
   pet_info.happiness++;
   pet_info.weight++;
+  pet_info.energy = Math.max(0, pet_info.energy - 10); // Decrease energy by 10
   checkAndUpdatePetInfoInHtml();
   notify("Yum!!!");
   animatePet("treat");
@@ -29,6 +31,7 @@ function clickedTreatButton() {
 function clickedPlayButton() {
   pet_info.happiness++;
   pet_info.weight = Math.max(0, pet_info.weight - 1);
+  pet_info.energy = Math.max(0, pet_info.energy - 20); // Decrease energy by 20
   checkAndUpdatePetInfoInHtml();
   notify("That was fun!!!");
   animatePet("play");
@@ -38,6 +41,7 @@ function clickedPlayButton() {
 function clickedExerciseButton() {
   pet_info.happiness = Math.max(0, pet_info.happiness - 1);
   pet_info.weight = Math.max(0, pet_info.weight - 1);
+  pet_info.energy = Math.max(0, pet_info.energy - 30); // Decrease energy by 30
   checkAndUpdatePetInfoInHtml();
   notify("Phew!");
   animatePet("exercise");
@@ -46,6 +50,7 @@ function clickedExerciseButton() {
 // Sleep button behavior
 function clickedSleepButton() {
   pet_info.happiness += 2;
+  pet_info.energy = Math.min(100, pet_info.energy + 50); // Increase energy by 50, max 100
   checkAndUpdatePetInfoInHtml();
   notify("ZZZ");
   animatePet("sleep");
@@ -60,13 +65,16 @@ function checkAndUpdatePetInfoInHtml() {
 function checkWeightAndHappinessBeforeUpdating() {
   if (pet_info.weight < 0) pet_info.weight = 0;
   if (pet_info.happiness < 0) pet_info.happiness = 0;
+  if (pet_info.energy < 0) pet_info.energy = 0;
+  if (pet_info.energy > 100) pet_info.energy = 100;
 }
 
-// Update HTML with current pet info
+// Updates HTML with current pet info
 function updatePetInfoInHtml() {
   $('.name').text(pet_info['name']);
   $('.weight').text(pet_info['weight']);
   $('.happiness').text(pet_info['happiness']);
+  $('.energy').text(pet_info['energy']);
 }
 
 // Notification using fadeToggle (Unique)
